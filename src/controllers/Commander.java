@@ -56,6 +56,7 @@ public class Commander {
 						break;
 					}
 				} 
+				// Add a slow down timer to reduce parallel processing in this thread
 			}
 
 			for(int i=0; i<counter; i++){
