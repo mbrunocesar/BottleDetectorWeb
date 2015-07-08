@@ -2,6 +2,7 @@ package controllers;
 
 import java.awt.image.BufferedImage;
 
+import utilities.Logger;
 import bitMasks.BComparer;
 import image.ImageTransform;
 import image.MyImage;
@@ -23,7 +24,6 @@ public class Executor implements Runnable{
 
 	public Executor(String urlImage, MyImage[] myBaseGroup, MyImage[] myLogoGroup){
 		// Saves locally the image
-		//System.out.println("Processing: "+urlImage);
 		if(urlImage.startsWith("http")){
 			imageTransformer = new ImageTransform(urlImage);
 		}else{
@@ -45,7 +45,7 @@ public class Executor implements Runnable{
 			//status_code, status_text, path_to_new_image, kooaba_response
 			String[] returns = {"-1", "System Crash", "none", "-1"};
 			if(imageTransformer.hasLoaded()){
-				System.out.println("Loaded");
+				Logger.println("Loaded");
 
 				// Put the image in a default size
 				imageTransformer.resize(600.0);
@@ -70,21 +70,17 @@ public class Executor implements Runnable{
 					double thisSimilarity = baseImage.compareTo(newHough);
 					firstAcumulater+=thisSimilarity;
 				}
-				System.out.println("Hough Similarity: "+firstAcumulater);
+				Logger.println("Hough Similarity: "+firstAcumulater);
 				//boolean detected = (acumulate > 1500.0);
-
 
 				// Stylised B comparisons 
 				BComparer styledB = new BComparer("bases/B.png");
 				int[] markings = styledB.compare(sobel);
 				int logoPattern = markings[2] / 2;
-				System.out.println("Logo Pattern: "+logoPattern);
-
-
+				Logger.println("Logo Pattern: "+logoPattern);
 
 				int combined_precision = (int) ((logoPattern*firstAcumulater)/100.0);
-
-				System.out.println("Precision: "+combined_precision);
+				Logger.println("Precision: "+combined_precision);
 
 
 				// Begin further analysis
@@ -95,9 +91,9 @@ public class Executor implements Runnable{
 				for(MyImage baseImage : logoGroup){
 					double thisSimilarity = baseImage.compareTo(newHough);
 					secondAcumulater+=thisSimilarity;
-					System.out.print(thisSimilarity+" + ");
+					Logger.print(thisSimilarity+" + ");
 				}
-				System.out.println("\nHough Similarity: "+secondAcumulater);
+				Logger.println("\nHough Similarity: "+secondAcumulater);
 
 				// Comparisons for bottle pattern
 				boolean detected = (combined_precision >= 396 && secondAcumulater > 2.97)

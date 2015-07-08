@@ -1,27 +1,26 @@
 package starter;
 
+import global.Path;
 import controllers.Commander;
-import json.Parser;
 
 public class Starter {
 
 	Commander commander;
 
 	public static void main(String[] args){
-
-		// Just for test purposes
-		/*
-			images = new String[8];
-			images[0] = "http://i.walmartimages.com/i/p/00/07/14/64/20/0007146420060_500X500.jpg";
-			images[1] = "https://www.aldi.us/fileadmin/fm-dam/Weekly_Assets/2013/SB_9_4/090413_44076_PomegranateJuice_D.jpg";
-			images[2] = "http://www.thegrocerygirls.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/C/C/CCHD3.jpg.jpg";
-			images[3] = "http://www.thegrocerygirls.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/Y/M/YMIXL.jpg.jpg";
-			images[4] = "http://akimages.shoplocal.com/dyn_li/600.600.90.0/Retailers/Aldi/130213HB_S_43212A_BHF_MangoJuiceSmoothie.JPG";
-			images[5] = "http://karasdealsandsteals.com/wp-content/uploads/2012/06/bolthouse-farms.jpg";
-			images[6] = "http://img4-3.cookinglight.timeinc.net/i/2013/01/1301-bolthouse-protein-plus-mango-l.jpg?400:400";
-			images[7] = "images/bases/input-base-1Y.png";
-		 */
-
+		Path.thisPath = "WebContent/";
+		//Logger.setAsDebugger();
+		
+		String[] images = new String[8];
+		images[0] = "http://i.walmartimages.com/i/p/00/07/14/64/20/0007146420060_500X500.jpg";
+		images[1] = "http://akimages.shoplocal.com/dyn_li/600.600.90.0/Retailers/Aldi/130213HB_S_43212A_BHF_MangoJuiceSmoothie.JPG";
+		images[2] = "http://2.bp.blogspot.com/-atTUfx2FZ4w/TzSf4dVR-OI/AAAAAAAABBg/bI9pKcE1nVc/s1600/IMG_1900.JPG";
+		images[3] = "http://www.thegrocerygirls.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/Y/M/YMIXL.jpg.jpg";
+		images[4] = "http://akimages.shoplocal.com/dyn_li/600.600.90.0/Retailers/Aldi/130213HB_S_43212A_BHF_MangoJuiceSmoothie.JPG";
+		images[5] = "http://karasdealsandsteals.com/wp-content/uploads/2012/06/bolthouse-farms.jpg";
+		images[6] = "http://www.megag.com.br/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/g/u/guarana_antarctica_lata.jpg";
+		images[7] = "images/bases/input-base-1Y.png";
+		
 		/*
 			images = new String[13];			
 			images[0] = "http://i.walmartimages.com/i/p/00/07/14/64/20/0007146420060_500X500.jpg";
@@ -55,19 +54,35 @@ public class Starter {
 			images[13] = "images/traditional-targets/z_bhf_logo.jpg";
 		 */
 
-		String[] images = Parser.readFromLink(null);
+		// String[] images = Parser.readFromLink(null);
 		new Starter(images);
 	}
-	
-	
+
+
 	public Starter(String[] images){
 		commander = new Commander(images);
-		
+
+		printResults();
 	}
 
 
 	public String[][] showResults() {
 		return commander.getResults();
+	}
+	
+	public void printResults() {
+		String[][] results = commander.getResults();
+		
+		for (int i = 0; i<results.length; i++) {
+			if (results[i][0] == "1") {
+				System.out.println("Garrafa Valida!");
+			} else if (results[i][0] == "11") {
+				System.out.println("Garrafa Invalida.");
+			} else if (results[i][0] == "10") {
+				System.out.println("Falha ao carregar..");
+			}  
+		}
+		
 	}
 
 }

@@ -1,5 +1,6 @@
 package controllers;
 
+import utilities.Logger;
 import global.Path;
 import image.MyImage;
 import image.MyLogo;
@@ -13,7 +14,6 @@ public class Commander {
 	Executor[] processors = new Executor[100];
 	
 	public Commander(String[] urlImages){
-
 
 		final String imagePath = Path.thisPath;
 		
@@ -37,12 +37,14 @@ public class Commander {
 				if(thisUrl == null){
 					break;
 				}
-				System.out.println("--------------");
-				System.out.println("Running "+(counter+1));
+				Logger.println("--------------");
+				Logger.println("Running "+(counter+1));
 
-				// Isolated for future multi-threaded uses
 				Executor executing = new Executor(thisUrl, baseGroup, logoGroup);
-				executing.run();
+				
+				Thread additionalThread = new Thread(executing);
+				additionalThread.start();
+				
 				processors[counter] = executing;
 				counter++;
 			}
@@ -63,11 +65,11 @@ public class Commander {
 				responses[i] = processors[i].getResults();
 			}
 			
-			System.out.println("END.");
+			Logger.println("END.");
 			
 		}else{
-			System.out.println("--------------");
-			System.out.println("Buffer Overflow");
+			Logger.println("--------------");
+			Logger.println("Buffer Overflow");
 		}
 	}
 

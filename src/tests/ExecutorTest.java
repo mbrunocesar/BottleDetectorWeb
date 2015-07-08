@@ -6,6 +6,7 @@ import global.Path;
 import org.junit.Before;
 import org.junit.Test;
 
+import utilities.Logger;
 import controllers.Commander;
 
 public class ExecutorTest {
@@ -18,6 +19,7 @@ public class ExecutorTest {
 	@Before
 	public void setUp() throws Exception {
 		Path.thisPath = "WebContent/";
+		Logger.setAsDebugger();
 	}
 
 	@Test
@@ -45,12 +47,20 @@ public class ExecutorTest {
 		
 		c1 = new Commander(image); results = c1.getResults();
 
+		// ASSERT THAT RECOGNIZED THE BOTTLES WHERE THEY REALLY EXISTS
 		for(int i=0; i<9; i++){
-			assertTrue(results[i][0]=="1");
+			// Check to see if the image was found in target server
+			if (results[i][0] != "10") { 
+				assertEquals(results[i][0], "1");
+			}
 		}
 
+		// ASSERT THAT DON'T RECOGNIZED ANY BOTTLES WHERE THEY REALLY DON'T EXISTS
 		for(int i=9; i<17; i++){
-			assertTrue(results[i][0]=="11");
+			// Check to see if the image was found in target server
+			if (results[i][0] != "10") { 
+				assertEquals(results[i][0], "11");
+			}
 		}
 	}
 
